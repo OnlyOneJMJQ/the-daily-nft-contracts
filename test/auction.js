@@ -59,10 +59,10 @@ contract("Auction", (accounts) => {
   it("should allow the auction to end after 1 day", async () => {
     const auctionInstance = await Auction.deployed();
 
-    const timestamp = await getLatestBlockTimestamp();
-
     // Gets the timestamp for 1 day from the current block in seconds
+    const timestamp = await getLatestBlockTimestamp();
     const nextDay = timestamp + 86400;
+
     await advanceTimeTo(nextDay);
 
     const tx = await auctionInstance.end();
