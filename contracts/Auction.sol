@@ -7,9 +7,6 @@ contract Auction {
     event Withdraw(address indexed bidder, uint amount);
     event End(address winner, uint amount);
 
-    // IERC721 public nft;
-    // uint public nftId;
-
     address payable public seller;
     uint public endAt;
     bool public started;
@@ -18,15 +15,11 @@ contract Auction {
     address public highestBidder;
     uint public highestBid; // Wei
     mapping(address => uint) public bids;
+    mapping(address => address) public nfts;
 
     constructor(
-        // address _nft,
-        // uint _nftId,
         uint _startingBid
     ) {
-        // nft = IERC721(_nft);
-        // nftId = _nftId;
-
         seller = payable(msg.sender);
         highestBid = _startingBid;
     }
@@ -35,7 +28,6 @@ contract Auction {
         require(!started, "started");
         require(msg.sender == seller, "not seller");
 
-        // nft.transferFrom(msg.sender, address(this), nftId);
         started = true;
         endAt = block.timestamp + 1 days;
 
@@ -46,9 +38,31 @@ contract Auction {
         require(started, "not started");
         require(block.timestamp < endAt, "ended");
         require(msg.value > highestBid, "value < highest");
+        require(nfts[msg.sender] != address(0), "include nft to display");
 
         if (highestBidder != address(0)) {
             bids[highestBidder] += highestBid;
+        }
+
+        highestBidder = msg.sender;
+        highestBid = msg.value;
+
+        emit Bid(msg.sender, msg.value);
+    }
+
+    // Overload if the user submits an NFT
+    function bid(address nft) external payable {
+        require(started, "not started");
+        require(block.timestamp < endAt, "ended");
+        require(msg.value > highestBid, "value < highest");
+
+        if (highestBidder != address(0)) {
+            bids[highestBidder] += highestBid;
+        }
+
+        if (nfts[msg.sender] == address(0)) {
+            require(nft != address(0), "invalid nft address");
+            nfts[msg.sender] = nft;
         }
 
         highestBidder = msg.sender;
@@ -71,12 +85,6 @@ contract Auction {
         require(!ended, "ended");
 
         ended = true;
-        // if (highestBidder != address(0)) {
-        //     nft.safeTransferFrom(address(this), highestBidder, nftId);
-        //     seller.transfer(highestBid);
-        // } else {
-        //     nft.safeTransferFrom(address(this), seller, nftId);
-        // }
 
         emit End(highestBidder, highestBid);
     }
