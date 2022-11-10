@@ -16,6 +16,7 @@ contract Auction {
     uint public highestBid; // Wei
     mapping(address => uint) public bids;
     mapping(address => address) public nfts;
+    mapping(address => uint256) public nftIds;
 
     constructor(
         uint _startingBid
@@ -51,7 +52,7 @@ contract Auction {
     }
 
     // Overload if the user submits an NFT
-    function bid(address nft) external payable {
+    function bid(address nft, uint256 nftId) external payable {
         require(started, "not started");
         require(block.timestamp < endAt, "ended");
         require(msg.value > highestBid, "value < highest");
@@ -63,6 +64,7 @@ contract Auction {
         if (nfts[msg.sender] == address(0)) {
             require(nft != address(0), "invalid nft address");
             nfts[msg.sender] = nft;
+            nftIds[msg.sender] = nftId;
         }
 
         highestBidder = msg.sender;

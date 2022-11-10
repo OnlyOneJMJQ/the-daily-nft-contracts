@@ -99,6 +99,10 @@ module.exports = {
     // }
   },
 
+  dashboard: {
+    host: '127.0.0.1'
+  },
+
   // Set default mocha options here, use special reporters, etc.
   mocha: {
     // timeout: 100000

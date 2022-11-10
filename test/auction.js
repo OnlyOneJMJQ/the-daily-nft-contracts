@@ -41,7 +41,9 @@ contract("Auction", (accounts) => {
 
     await truffleAssert.reverts(
       // Using accounts[9] as a stand-in for an NFT address
-      auctionInstance.methods['bid(address)'](accounts[9], { value: 100 }),
+      auctionInstance.methods["bid(address,uint256)"](accounts[9], 1, {
+        value: 100,
+      }),
       "value < highest"
     );
   });
@@ -59,7 +61,11 @@ contract("Auction", (accounts) => {
     const auctionInstance = await Auction.deployed();
 
     await truffleAssert.reverts(
-      auctionInstance.methods['bid(address)']('0x0000000000000000000000000000000000000000', { value: 101 }),
+      auctionInstance.methods["bid(address,uint256)"](
+        "0x0000000000000000000000000000000000000000",
+        1,
+        { value: 101 }
+      ),
       "invalid nft address"
     );
   });
@@ -70,7 +76,9 @@ contract("Auction", (accounts) => {
     const auctionInstance = await Auction.deployed();
 
     // Using accounts[9] as a stand-in for an NFT address
-    await auctionInstance.methods['bid(address)'](accounts[9], { value: 101 });
+    await auctionInstance.methods["bid(address,uint256)"](accounts[9], 1, {
+      value: 101,
+    });
     const highestBId = (await auctionInstance.highestBid.call()).toNumber();
 
     assert.equal(highestBId, 101, "opening bid is not equal to 100 wei");
