@@ -1,0 +1,25 @@
+{
+  "name": "off-site-workshop-22",
+  "version": "1.0.0",
+  "description": "## off/chain Sicily 2022",
+  "main": "truffle-config.js",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "test": "truffle test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/OnlyOneJMJQ/off-site-workshop-22.git"
+  },
+  "author": "Josh Quintal",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/OnlyOneJMJQ/off-site-workshop-22/issues"
+  },
+  "homepage": "https://github.com/OnlyOneJMJQ/off-site-workshop-22#readme",
+  "dependencies": {
+    "truffle-assertions": "^0.9.2"
+  }
+}
