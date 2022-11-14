@@ -14,8 +14,14 @@ contract Auction {
 
     address public highestBidder;
     uint public highestBid; // Wei
+
+    // User => Amount Bid
     mapping(address => uint) public bids;
+
+    // User => NFT Contract Address
     mapping(address => address) public nfts;
+
+    // User => NFT Token ID
     mapping(address => uint256) public nftIds;
 
     constructor(
